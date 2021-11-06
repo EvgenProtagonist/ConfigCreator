@@ -10,7 +10,7 @@ def prepare(origin):
     vlanList = []
     vlanKeys = ['VlanName', 'VlanID', 'untag', 'tag']
 
-    with open(origin, 'r') as file:
+    with open('data/' + origin, 'r') as file:
         for line in file:
             matchSingle = re.search(
                 r'config ports (?P<port>\d*).* state enable.*description "*(?P<desc>|[^\"\n\$]*)("|$)', line)
@@ -44,13 +44,13 @@ def prepare(origin):
             except AttributeError:
                 pass
 
-    with open('ports.csv', 'w', newline='') as file:
+    with open('data/ports.csv', 'w', newline='') as file:
         writer = csv.DictWriter(file, delimiter=';', fieldnames=portKeys)
         writer.writeheader()
         for i in portList:
             writer.writerow({portKeys[0]: i.number, portKeys[1]: i.description, portKeys[2]: i.service})
 
-    with open('vlans.csv', 'w', newline='') as file:
+    with open('data/vlans.csv', 'w', newline='') as file:
         writer = csv.DictWriter(file, delimiter=';', fieldnames=vlanKeys)
         writer.writeheader()
         for i in vlanList:

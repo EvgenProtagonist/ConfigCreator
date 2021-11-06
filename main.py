@@ -19,7 +19,7 @@ def dictSearch(dictList, value: str):
 
 
 #--- Чтение файла шаблона в объект ----
-with open('template.txt', 'r') as file:
+with open('data/template.txt', 'r') as file:
     filedata = file.read()
 
 #--- Получение списков меток по типам скобок ---
@@ -34,19 +34,19 @@ for i in switchMarksList:
     filedata = filedata.replace(i, input('Введите данные для ' + i + ': '))
 
 
-origin = input('Введите имя исходного конфига (с указанием расширения файла): ')
+origin = input('Введите имя исходного конфига в папке data(с указанием расширения файла): ')
 resultConfigName = input('Имя генерируемого конфига (с указанием расширения файла): ')
 
 #--- Вызов функции получения данных из файла конфигурации ---
 functions.prepare(origin)
 
 #--- Получение данных из ports.csv ---
-os.startfile(r'ports.csv')
+os.startfile(r'data\ports.csv')
 input('\nЗаполните столбец ServiceType (l2, l3, trunk)'
       '\nПри необходимости можно добавить в список новые порты'
       '\nДля сохранения изменений используйте CTRL+S, от сохранения при закрытии откажитесь'
       '\nНажмите Enter для продолжения... ')
-with open('ports.csv', 'r') as file:
+with open('data/ports.csv', 'r') as file:
     reader = csv.DictReader(file, delimiter=';')
     for row in reader:
         portList.append(Port(row['Port'], row['Description'], row['ServiceType']))
@@ -68,11 +68,11 @@ filedata = filedata.replace('<ports>', "".join(configPorts))
 
 
 #--- Получение данных из vlans.csv ---
-os.startfile(r'vlans.csv')
+os.startfile(r'data\vlans.csv')
 input('\nПроверьте и при необходимости отредактируйте таблицу vlans'
       '\nДля сохранения изменений используйте CTRL+S, от сохранения при закрытии нужно отказаться'
       '\nНажмите Enter для продолжения... ')
-with open('vlans.csv', 'r') as file:
+with open('data/vlans.csv', 'r') as file:
     reader = csv.DictReader(file, delimiter=';')
     for row in reader:
         vlanList.append(Vlan(row['VlanName'], row['VlanID'], row['untag'], row['tag']))
@@ -84,8 +84,8 @@ for i in vlanList:
 filedata = filedata.replace('<vlans>', "".join(configVlans))
     
 #--- Сохранение всех результатов в новый файл ---
-with open(resultConfigName, 'w') as file:
+with open('data/' + resultConfigName, 'w') as file:
     file.write(filedata)
 
-os.startfile(resultConfigName)
+os.startfile(r'data\\' + resultConfigName)
 input()
